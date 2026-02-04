@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ViniSystems</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Roboto:wght@400;700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+
+  <style>
+  :root{
+    --header-bg:#ECECEC;
+    --text-color:#000000;
+    --page-bg:#FFF8E1;
+    --hero-bg:#FFFCF2;
+    --btn-bg:#ECECEC;
+    --btn-hover:#DADADA;
+    --shadow-color:rgba(0,0,0,0.15);
+
+    --teal:#2A6F78;
+    --deep:#3C3F42;
+    --tan:#D2B48C;
+    --muted:#6b6f73;
+    --line:rgba(0,0,0,0.08);
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    font-family:'Roboto',sans-serif;
+    background:var(--page-bg);
+    color:var(--text-color);
+    overflow-x:hidden;
+  }
+  a{ text-decoration:none; color:inherit; }
+
+  /* ===== Header (nouvelle version) ===== */
+  header.site-header{
+    position:sticky;
+    top:0;
+    z-index:2000;
+    background:var(--header-bg);
+    box-shadow:0 4px 10px var(--shadow-color);
+  }
+
+  .nav-wrap{
+  max-width:1200px;
+  margin:0 auto;
+  padding:8px 18px;          /* un peu moins de padding vertical pour “remplir” */
+  display:flex;
+  align-items:center;         /* centrage vertical */
+  justify-content:space-between;
+  gap:14px;
+  }
+
+  .brand{
+  display:flex;
+  align-items:center;         /* centrage vertical logo+texte */
+  gap:12px;
+  min-width:auto;    
+  }
+
+  /* MODIF: logo plus gros dans l'en-tête */
+  .brand img{
+  height:58px;                /* au lieu de width fixe : remplit la hauteur de l’entête */
+  width:auto;
+  display:block;
+  filter:drop-shadow(0 6px 10px rgba(0,0,0,0.10));
+  }
+
+  .brand a.brand-home{
+  display:inline-flex;
+  align-items:center;         /* au lieu de baseline => centre parfaitement dans la barre */
+  gap:12px;
+  }
+
+  /* MODIF: texte ViniSystems plus lisible en header */
+  .brand-name{
+  font-family:'Playfair Display',serif;
+  font-weight:700;
+  font-size:clamp(22px, 2.2vw, 30px);  /* “le plus gros possible” sans casser */
+  letter-spacing:0.2px;
+  line-height:1;
+  padding-top:0;              /* enlève le petit décalage */
+  display:block;
+  }
+
+  .nav-right{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+    justify-content:flex-end;
+  }
+
+  /* dropdown buttons */
+  .nav-dd{
+    position:relative ;
+    display:inline-flex;
+    align-items:center;
+  }
+  .nav-dd > button{
+    border:none;
+    background:transparent;
+    font-size:16px;
+    padding:10px 10px;
+    cursor:pointer;
+    font-weight:700;
+    color:#111;
+    border-radius:10px;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    transition:background 160ms ease, transform 160ms ease;
+  }
+  .nav-dd > button:hover{
+    background:rgba(0,0,0,0.04);
+    transform:translateY(-1px);
+  }
+  .nav-dd > button .chev{
+    width:9px;
+    height:9px;
+    border-right:2px solid #333;
+    border-bottom:2px solid #333;
+    transform:rotate(45deg);
+    opacity:0.7;
+    margin-top:-2px;
+  }
+
+  .nav-menu{
+    display:none;
+    position:absolute;
+    top:115%;
+    right:0;
+    min-width:260px;
+    background:#f9f9f9;
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 10px 22px rgba(0,0,0,0.18);
+    border:1px solid rgba(0,0,0,0.06);
+    z-index:2500;
+  }
+  .nav-menu a{
+    display:block;
+    padding:12px 14px;
+    font-size:14px;
+    color:#111;
+    border-bottom:1px solid #eee;
+  }
+  .nav-menu a:last-child{ border-bottom:none; }
+  .nav-menu a:hover{ background:#ddd; color:#990000; }
+
+  .nav-dd.open .nav-menu{ display:block; }
+
+  /* Contact button (encadré bleu canard) */
+  .contact-btn{
+    display:inline-flex;
+    align-items:center;
+    padding:10px 12px;
+    font-size:16px;
+    border-radius:12px;
+    border:2px solid var(--teal);
+    color:var(--teal);
+    font-weight:800;
+    background:transparent;
+    transition:background 160ms ease, transform 160ms ease;
+  }
+  .contact-btn:hover{
+    background:rgba(42,111,120,0.10);
+    transform:translateY(-1px);
+  }
+
+  /* ===== Language dropdown (identique, tout à droite) ===== */
+  .lang{
+    position:relative;
+    display:inline-block;
+    margin-left:6px;
+  }
+  .lang-btn{
+    border:none;
+    background:transparent;
+    padding:6px 6px;
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    border-radius:10px;
+    transition:background 160ms ease, transform 160ms ease;
+  }
+  .lang-btn:hover{
+    background:rgba(0,0,0,0.04);
+    transform:translateY(-1px);
+  }
+  .lang-btn img{ width:30px; height:auto; display:block; }
+  .lang-btn .chev{
+    width:10px;
+    height:10px;
+    border-right:2px solid #333;
+    border-bottom:2px solid #333;
+    transform:rotate(45deg);
+    margin-top:-2px;
+    opacity:0.7;
+  }
+  .lang-menu{
+    display:none;
+    position:absolute;
+    top:115%;
+    right:0;
+    background:#f9f9f9;
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 10px 22px rgba(0,0,0,0.18);
+    min-width:170px;
+    z-index:2600;
+    border:1px solid rgba(0,0,0,0.06);
+  }
+  .lang-menu a{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 12px;
+    border-bottom:1px solid #eee;
+    font-size:14px;
+    color:#111;
+  }
+  .lang-menu a:last-child{ border-bottom:none; }
+  .lang-menu a:hover{ background:#ddd; color:#990000; }
+  .lang-menu img{ width:26px; height:auto; }
+  .lang.open .lang-menu{ display:block; }
+
+  /* Mobile: menu compact */
+  .mobile-toggle{
+    display:none;
+    border:none;
+    background:transparent;
+    cursor:pointer;
+    padding:10px;
+    border-radius:10px;
+  }
+  .mobile-toggle:hover{ background:rgba(0,0,0,0.04); }
+  .mobile-toggle .bar{
+    display:block;
+    width:24px;
+    height:3px;
+    background:#333;
+    border-radius:2px;
+    margin:4px 0;
+  }
+
+  @media (max-width: 980px){
+    .nav-wrap{ gap:10px; }
+    .brand-name{ font-size:22px; }
+    .nav-right{ display:none; width:100%; }
+    header.site-header.open .nav-right{
+      display:flex;
+      padding:8px 4px 10px;
+      gap:8px;
+    }
+    .mobile-toggle{ display:inline-block; }
+    .nav-wrap{ flex-wrap:wrap; }
+    .brand{ min-width:auto; }
+    .nav-dd, .contact-btn, .lang{ width:auto; }
+    .nav-dd > button{ padding:10px 8px; font-size:16px; }
+    .nav-menu{ right:auto; left:0; }
+
+    /* MODIF: logo header mobile un peu moins grand */
+    .brand img{ 
+      width:auto; 
+      height:46px; }
+  }
+
+  /* ===== Hero ===== */
+  .hero{
+    background:var(--hero-bg);
+    padding:28px 18px 32px;
+    position:relative;
+    overflow:hidden;
+    box-shadow:0 6px 15px var(--shadow-color);
+    transition:transform 0.35s ease, box-shadow 0.35s ease;
+  }
+  .hero:hover{
+    transform:translateY(-4px);
+    box-shadow:0 12px 26px rgba(0,0,0,0.18);
+  }
+
+  .hero-inner{
+    width:100%;
+    max-width:1200px;
+    margin:0 auto;
+    position:relative;
+    z-index:2;
+
+    display:grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap:26px;
+    align-items:center;
+
+    overflow:visible;
+  }
+
+  .hero-left{
+    background:transparent;
+    border:none;
+    border-radius:0;
+    box-shadow:none;
+    min-height:480px;
+    position:relative;
+    overflow:visible;
+    display:flex;
+    align-items:flex-end;
+    justify-content:flex-start;
+  }
+
+  .hero-right{
+    justify-self:end;
+    text-align:left;
+    max-width:620px;
+  }
+  .hero-right h1{
+    font-family:'Playfair Display',serif;
+    font-size:42px;
+    line-height:1.05;
+    margin:0 0 12px 0;
+    letter-spacing:0.2px;
+    color:#111;
+  }
+  .hero-right p{
+    margin:0 0 16px 0;
+    font-size:16px;
+    line-height:1.55;
+    color:#333;
+    max-width:56ch;
+    opacity:0;
+    transform:translateY(10px);
+    transition: opacity 520ms ease, transform 520ms ease;
+  }
+  .hero-right p.show{
+    opacity:1;
+    transform:translateY(0);
+  }
+
+  .hero-anim{
+    position:absolute;
+    inset:0;
+    display:block;
+    overflow:visible;
+  }
+
+  .hero-img{
+    position:absolute;
+    bottom:0;
+    width:auto;
+    will-change: opacity, transform;
+    filter: drop-shadow(0 16px 26px rgba(0,0,0,0.18));
+  }
+
+.hero-img-cuve{
+  left:50%;
+  bottom:20px;
+  height:clamp(380px, 42vw, 660px);
+
+  opacity:0;
+   transform: translateX(-50%) translateY(14px) scale(0.995);
+
+  filter: drop-shadow(0 16px 26px rgba(0,0,0,0.18));
+}
+
+
+@keyframes heroFadeIn{
+  to{
+    opacity:1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+}
+
+
+.hero-anim.play .hero-img-cuve{
+  animation: heroFadeIn 900ms ease forwards;
+  animation-delay: 120ms;
+}
+
+
+    .hero-title{
+  position:relative;
+}
+
+    .hero-title-ghost{
+  margin:0 0 12px 0;
+  font-family:'Playfair Display',serif;
+  font-size:42px;
+  line-height:1.05;
+  letter-spacing:0.2px;
+  color:#111;
+  visibility:hidden;     
+}
+
+    .hero-title-live{
+  position:absolute;
+  inset:0;
+  margin-bottom: 28px;
+  margin:0 0 12px 0;
+  font-family:'Playfair Display',serif;
+  font-size:42px;
+  line-height:1.05;
+  letter-spacing:0.2px;
+  color:#111;
+}
+
+  .magic-btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:12px 18px;
+    border-radius:12px;
+    border:2px solid var(--teal);
+    background:var(--teal);
+    color:#fff;
+    font-weight:800;
+    box-shadow:0 10px 22px rgba(0,0,0,0.14);
+    opacity:0;
+    transform:none;
+    transition:none;
+  }
+    
+  .magic-btn.brutal-show{ opacity:1; }
+  .magic-btn:hover{
+    filter:brightness(1.05);
+    transform:translateY(-2px);
+  }
+  .magic-btn:active{ transform:translateY(0px); }
+
+  @media (max-width: 980px){
+    .hero-inner{
+      grid-template-columns:1fr;
+      row-gap:18px;
+      justify-items:center;
+    }
+    .hero-left{ min-height:380px; }
+    .hero-right{
+      justify-self:center;
+      text-align:center;
+    }
+    .hero-right h1{ font-size:34px; }
+    .hero-right p{ max-width: 70ch; }
+
+    .hero-img-cuve{
+      left:50%;
+      height:clamp(300px, 80vw, 460px);
+      transform:translateX(-50%) translateY(14px) scale(0.995);
+    }
+
+    /* Sur mobile: on évite conflit animation/translateX */
+    .hero-anim.play .hero-img-cuve{
+      animation:none;
+      opacity:1;
+      transform:translateX(-50%) translateY(0) scale(1);
+    }
+  }
+
+  .code-layer,
+  .brand-icon,
+  .wordmark-wrap,
+  .wordmark,
+  .its-simple,
+  .tagline{
+    display:none !important;
+  }
+  /* ===== Main layout ===== */
+  main{
+    max-width:1200px;
+    margin:0 auto;
+    padding:56px 18px 0;
+  }
+
+  /* ===== Grille 2x2 des solutions (4 cartes grises) ===== */
+  .solutions-grid{
+    margin:56px 0 48px;
+    display:grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap:18px;
+  }
+
+  .card{
+    background:var(--deep);
+    color:#fff;
+    border-radius:18px;
+    box-shadow:0 6px 15px var(--shadow-color);
+    padding:26px 22px;
+    position:relative;
+    overflow:hidden;
+    min-height:190px;
+    transition:transform 0.35s ease, box-shadow 0.35s ease;
+  }
+  .card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 12px 26px rgba(0,0,0,0.18);
+  }
+  .card h3{
+    font-family:'Playfair Display',serif;
+    font-size:24px;
+    margin:0 0 10px 0;
+    letter-spacing:0.2px;
+  }
+  .card .card-btn{
+    display:inline-flex;
+    margin-top:10px;
+    padding:10px 14px;
+    border-radius:12px;
+    background:var(--teal);
+    color:#fff;
+    font-weight:800;
+    transition:transform 180ms ease, filter 180ms ease;
+  }
+  .card .card-btn:hover{
+    filter:brightness(1.05);
+    transform:translateY(-2px);
+  }
+
+  @media (max-width: 980px){
+    .solutions-grid{ grid-template-columns:1fr; }
+    .card{ min-height:170px; }
+  }
+
+  /* ===== Bloc mission + liste + espace image PNG ===== */
+  .mission{
+    margin:70px 0 70px;
+    background:transparent;
+    padding:8px 0 0;
+  }
+
+  .mission-inner{
+    display:grid;
+    grid-template-columns: 1.25fr 0.75fr;
+    gap:40px;
+    align-items:start;
+  }
+
+  .mission h2{
+    font-family:'Playfair Display',serif;
+    font-size:30px;
+    margin:0 0 10px 0;
+    letter-spacing:0.2px;
+    color:#111;
+    margin-bottom:22px;
+  }
+  .mission p{
+    margin:0 0 10px 0;
+    color:#333;
+    line-height:1.55;
+    max-width:70ch;
+  }
+
+  .mission ul{
+    margin:10px 0 0 0;
+    padding:0;
+    list-style:none;
+  }
+  .mission li{
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+    margin:16px 0;
+    color:#333;
+    line-height:1.5;
+  }
+  .check{
+    flex:0 0 auto;
+    width:22px;
+    height:22px;
+    border-radius:999px;
+    background:rgba(42,111,120,0.14);
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--teal);
+    font-weight:900;
+    font-family:ui-monospace, SFMono-Regular, Consolas, monospace;
+    margin-top:1px;
+  }
+
+  .mission-visual{
+    position:relative;
+    min-height:auto;
+  }
+
+  .mission-img{
+  width:100%;
+  max-width:950px;
+  margin-left:auto;
+  display:block;
+  border-radius:0;
+  box-shadow:none;
+}
+
+  @media (min-width: 981px){
+    .mission-text{
+      padding-right: 360px;
+      position:relative;
+    }
+    .mission-visual{
+      position:absolute;
+      right:18px;
+      width:360px;
+      margin-top:0;
+    }
+    .mission-inner{
+      grid-template-columns:1fr;
+      position:relative;
+    }
+  }
+
+    /* état caché */
+.reveal{
+  opacity:0;
+  transform: translateY(18px);
+  transition: opacity 700ms ease, transform 700ms ease;
+  will-change: opacity, transform;
+}
+
+/* état visible */
+.reveal.is-visible{
+  opacity:1;
+  transform: translateY(0);
+}
+
+/* petites variations optionnelles */
+.reveal.reveal-soft{
+  transform: translateY(12px);
+}
+
+/* respect accessibilité */
+@media (prefers-reduced-motion: reduce){
+  .reveal{
+    opacity:1;
+    transform:none;
+    transition:none;
+  }
+}
+
+  @media (max-width: 980px){
+    .mission-inner{ grid-template-columns:1fr; }
+    .mission-text{ padding-right:0; }
+    .mission-visual{ position:relative; right:auto; width:auto; }
+    .mission-img{max-width:100%;margin:0 auto; }
+  }
+
+  /* ===== ViniBook (section existante, gardée) ===== */
+  .vinibook{
+    margin:70px 0 80px;
+    background:var(--page-bg);
+    color:#000;
+    border-radius:18px;
+    box-shadow:0 6px 15px var(--shadow-color);
+    overflow:visible;
+    position:relative;
+    display:grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap:22px;
+    padding:40px 22px;
+    transition:transform 0.35s ease, box-shadow 0.35s ease;
+    border:1px solid rgba(0,0,0,0.06);
+  }
+  .vinibook:hover{
+    transform:translateY(-6px);
+    box-shadow:0 12px 26px rgba(0,0,0,0.18);
+  }
+  .vinibook h2{
+    font-family:'Playfair Display',serif;
+    font-size:30px;
+    margin:0 0 12px 0;
+  }
+  .vinibook p{
+    margin:0 0 14px 0;
+    line-height:1.55;
+    color:#333;
+  }
+  .vinibook .btn-grey{
+    display:inline-flex;
+    margin-top:8px;
+    padding:12px 18px;
+    border-radius:12px;
+    background:var(--btn-bg);
+    color:#000;
+    font-weight:800;
+    box-shadow:0 10px 22px rgba(0,0,0,0.14);
+    transition:background 180ms ease, transform 180ms ease;
+  }
+  .vinibook .btn-grey:hover{
+    background:var(--btn-hover);
+    transform:translateY(-2px);
+  }
+  .vinibook .media{
+    position:relative;
+    justify-self:center;
+  }
+  .vinibook .media img{
+    width:420px;
+    height:300px;
+    object-fit:cover;
+    display:block;
+    border-radius:18px;
+    box-shadow:0 16px 36px rgba(0,0,0,0.20);
+    transform:translateY(-10px);
+  }
+    .vinibook .girl-sitting{          
+  position:absolute;
+  right:60px;
+  top:0;                               /* ancrée au bord exact */
+  transform: translateY(-55%);         /* la moitié du corps passe au-dessus */
+  width:180px;
+  height:auto;
+  z-index:5;
+  pointer-events:none;
+  transform: translateY(-58%); 
+  filter:
+    drop-shadow(0 10px 14px rgba(0,0,0,0.25));
+}
+
+  .vinibook::before{
+  content:"";
+  position:absolute;
+  top:-2px;
+  right:24px;
+  width:120px;
+  height:12px;
+  background:rgba(0,0,0,0.15);
+  filter:blur(10px);
+  border-radius:50%;
+  z-index:4;
+}
+
+    .vinibook .girl-sitting.reveal{
+  transform: translateY(-58%);              /* ta position assise */
+  transition: opacity 700ms ease;           /* pas de transition transform */
+}
+
+.vinibook .girl-sitting.reveal.is-visible{
+  opacity:1;
+}
+    
+  @media (max-width: 980px){
+    .vinibook{ grid-template-columns:1fr; padding:34px 16px; }
+    .vinibook .media img{ width:100%; height:240px; transform:translateY(-6px); }
+  }
+
+  @media (max-width: 980px){
+  .vinibook .girl-sitting{
+    right:16px;
+    width:140px;
+    transform: translateY(-50%);
+  }
+}
+
+  /* ===== Footer (nouvelle version) ===== */
+  footer.site-footer{
+    margin-top:26px;
+    background:var(--header-bg);
+    box-shadow:0 -4px 10px var(--shadow-color);
+  }
+
+  .footer-top{
+    max-width:1200px;
+    margin:0 auto;
+    padding:26px 18px 14px;
+    display:grid;
+    grid-template-columns: 1.2fr 1fr 1fr 1fr 0.9fr;
+    gap:18px;
+    align-items:start;
+  }
+
+  .footer-brand{
+    display:flex;
+    align-items:center;
+    align-items:flex-start;
+  flex-direction:column;
+  gap:10px;
+  }
+
+    .footer-tagline{
+  font-size:13px;
+  line-height:1.35;
+  color:var(--muted);
+  max-width:220px;
+}
+
+  /* MODIF: logo plus gros dans le pied de page */
+  .footer-brand img{
+  height:100px;               /* remplace width:... par height */
+  width:auto;
+  display:block;
+  filter:drop-shadow(0 6px 10px rgba(0,0,0,0.10));
+  }
+
+  .footer-col h4{
+    margin:6px 0 10px 0;
+    font-size:14px;
+    letter-spacing:0.4px;
+    color:var(--teal);
+    text-transform:none;
+    font-weight:900;
+  }
+  .footer-col a{
+    display:block;
+    padding:6px 0;
+    color:var(--muted);
+    font-size:14px;
+    transition:color 160ms ease;
+  }
+  .footer-col a:hover{ color:#111; }
+
+  .footer-bottom{
+    border-top:1px solid rgba(0,0,0,0.10);
+    padding:12px 18px 18px;
+  }
+  .footer-bottom .bottom-wrap{
+  max-width:1200px;
+  margin:0 auto;
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px 14px;
+  align-items:center;
+  justify-content:flex-end; /* au lieu de center */
+  color:#333;
+  font-size:13px;
+  }
+  .footer-bottom a{
+    color:#333;
+    transition:color 160ms ease;
+  }
+  .footer-bottom a:hover{ color:#990000; }
+
+  @media (max-width: 980px){
+    .footer-top{ grid-template-columns:1fr 1fr; }
+    /* MODIF: logo footer mobile un peu moins grand */
+    .footer-brand img{ height:44px; }
+    .footer-tagline{ max-width:none; }
+  }
+  @media (max-width: 640px){
+    .footer-top{ grid-template-columns:1fr; }
+    .footer-bottom .bottom-wrap{ justify-content:flex-start; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .hero:hover, .card:hover, .vinibook:hover{
+      transform:none;
+      box-shadow:0 6px 15px var(--shadow-color);
+    }
+    .magic-btn{ opacity:1; transform:none; }
+  }
+</style>
+</head>
+
+<body data-lang="es">
+
+  <!-- HEADER -->
+  <header class="site-header" id="siteHeader">
+    <div class="nav-wrap">
+      <div class="brand">
+        <a class="brand-home" href="index.html" aria-label="Volver al inicio">
+          <img src="images/vinisystems-icon.png" alt="Logotipo de ViniSystems">
+          <span class="brand-name">ViniSystems</span>
+        </a>
+      </div>
+
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Abrir el menú" aria-expanded="false">
+        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+      </button>
+
+      <nav class="nav-right" aria-label="Navegación principal">
+        <div class="nav-dd" data-dd>
+          <button type="button" aria-haspopup="true" aria-expanded="false">
+            Soluciones <span class="chev" aria-hidden="true"></span>
+          </button>
+          <div class="nav-menu" role="menu">
+            <a href="mini.html">Software de gestión y asesoramiento</a>
+            <a href="tailored.html">Su software a medida</a>
+            <a href="website.html">Crear su sitio web</a>
+            <a href="documents.html">Experiencia normativa</a>
+          </div>
+        </div>
+
+        <div class="nav-dd" data-dd>
+          <button type="button" aria-haspopup="true" aria-expanded="false">
+            ViniBook <span class="chev" aria-hidden="true"></span>
+          </button>
+          <div class="nav-menu" role="menu">
+            <a href="vinibook.html">Descubrir la plataforma</a>
+            <a href="join.html" aria-label="Enlace de la plataforma por definir">Déjenos su opinión</a>
+          </div>
+        </div>
+
+        <div class="nav-dd" data-dd>
+          <button type="button" aria-haspopup="true" aria-expanded="false">
+            Sobre nosotros <span class="chev" aria-hidden="true"></span>
+          </button>
+          <div class="nav-menu" role="menu">
+            <a href="vinisystems.html">La historia de ViniSystems</a>
+            <a href="reviews.html">Confían en nosotros</a>
+          </div>
+        </div>
+
+        <a class="contact-btn" href="contact.html">Contáctenos</a>
+
+        <div class="lang" id="langSwitch">
+          <button class="lang-btn" id="langBtn" aria-label="Idioma" aria-haspopup="true" aria-expanded="false">
+            <img id="langCurrentFlag" src="images/es.png" alt="ES">
+            <span class="chev" aria-hidden="true"></span>
+          </button>
+          <div class="lang-menu" id="langMenu" role="menu" aria-label="Elegir idioma">
+            <a href="index.html"><img src="images/fr.png" alt="FR"> Français</a>
+            <a href="index-en.html"><img src="images/en.png" alt="EN"> English</a>
+            <a href="index-es.html"><img src="images/es.png" alt="ES"> Español</a>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero hero-split" aria-label="Sección principal">
+  <div class="hero-inner hero-split-inner">
+    <div class="hero-left" aria-label="Animación">
+  <div class="hero-anim" id="heroAnim">
+    <img class="hero-img hero-img-cuve" src="images/indexcuve.png" alt="" aria-hidden="true">
+  </div>
+</div>
+
+    <div class="hero-right">
+  <div class="hero-title">
+    <h1 class="hero-title-ghost">Soluciones que se adaptan a sus necesidades</h1>
+    <h1 class="hero-title-live" id="heroTitle"></h1>
+  </div>
+
+  <p>
+   ViniSystems ofrece aplicaciones, software y herramientas a medida con interfaces intuitivas, con la misión de conciliar asesoramiento y gestión en plataformas fáciles de usar.<br>
+   ¿Nunca ha encontrado la solución que encaje perfectamente con usted?
+  </p>
+
+  <a class="magic-btn" id="heroCta" href="contact.html">Cuéntenos qué necesita</a>
+</div>
+
+  </div>
+</section>
+
+
+  <main>
+
+    <!-- SOLUTIONS GRID (4 cartes) -->
+    <section class="solutions-grid" aria-label="Soluciones">
+      <article class="card reveal">
+        <h3>VS Winery Management: una herramienta de gestión y asesoramiento autónoma y personalizable</h3>
+        <a class="card-btn" href="mini.html">Saber más</a>
+      </article>
+
+      <article class="card reveal">
+        <h3>Construyamos juntos el sistema que encaja perfectamente con usted</h3>
+        <a class="card-btn" href="tailored.html">Saber más</a>
+      </article>
+
+      <article class="card reveal">
+        <h3>Cree un sitio web moderno y aprenda a hacer cambios fácilmente</h3>
+        <a class="card-btn" href="website.html">Saber más</a>
+      </article>
+
+      <article class="card reveal">
+        <h3>¿Están al día sus documentos normativos?</h3>
+        <a class="card-btn" href="documents.html">Saber más</a>
+      </article>
+    </section>
+
+    <!-- MISSION + PLACEHOLDER PNG -->
+    <section class="mission" aria-label="Objetivos">
+      <div class="mission-inner">
+        <div class="mission-text">
+          <h2>Porque la tecnología no está para hacerle perder tiempo, ViniSystems tiene como objetivo:</h2>
+
+          <ul>
+            <li><span class="check">✓</span><span>Ofrecerle herramientas con interfaces amigables que apetece utilizar</span></li>
+            <li><span class="check">✓</span><span>Ahorrarle tiempo automatizando al máximo la gestión de su bodega</span></li>
+            <li><span class="check">✓</span><span>Ayudarle a cumplir la normativa sin que sea un quebradero de cabeza</span></li>
+            <li><span class="check">✓</span><span>Permitirle recuperar el control de sus herramientas digitales</span></li>
+            <li><span class="check">✓</span><span>Adaptarse a sus necesidades y a su forma de gestionar su bodega</span></li>
+          </ul>
+        </div>
+
+        <div class="mission-visual" aria-label="Imagen a añadir">
+          <img
+  src="images/screen.png"
+  alt="Vista previa de las herramientas de ViniSystems"
+  class="mission-img"
+/>
+        </div>
+      </div>
+    </section>
+
+    <!-- VINIBOOK (gardée) -->
+    <section class="vinibook reveal" aria-label="ViniBook">
+            <img class="girl-sitting reveal" src="images/girlsitting.png" alt="" aria-hidden="true">
+      <div class="content">
+        <h2>Una plataforma de apoyo y de intercambio entre profesionales</h2>
+        <p>
+          ViniBook es un proyecto de ViniSystems en fase de prueba: su objetivo es reunir a los profesionales del vino en una plataforma de apoyo y orientación, con experiencias reales y feedback concreto.
+        </p>
+        <a href="vinibook.html" class="btn-grey" aria-label="Enlace de la plataforma por definir">Saber más sobre el proyecto ViniBook</a>
+      </div>
+      <div class="media">
+        <img src="images/vinibookpre.jpg" alt="Comunidad ViniBook">
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img src="images/completewordmark.png" alt="ViniSystems">
+        <div class="footer-tagline">Tecnologías a medida para simplificar la vida de los profesionales del vino</div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Soluciones</h4>
+        <a href="mini.html">Software de gestión y asesoramiento</a>
+        <a href="tailored.html">Su solución a medida</a>
+        <a href="website.html">Crear su sitio web</a>
+        <a href="documents.html">Experiencia normativa</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>ViniBook</h4>
+        <a href="vinibook.html">Descubrir la plataforma</a>
+        <a href="join.html">Déjenos su opinión</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Sobre nosotros</h4>
+        <a href="vinisystems.html">La historia de ViniSystems</a>
+        <a href="reviews.html">Confían en nosotros</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Contacto</h4>
+        <a href="mailto:contact@vinisystems.com">contact@vinisystems.com</a>
+        <a href="contact.html">Solicite una consulta gratuita</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="bottom-wrap">
+        <span>© 2026 ViniSystems - Todos los derechos reservados</span>
+        <span>·</span>
+        <a href="legalmentions.html">Aviso legal y condiciones generales de venta</a>
+        <span>·</span>
+        <a href="confidentiality.html">Política de privacidad</a>
+        <span>·</span>
+        <a href="resiliation.html">Contratos y rescisión</a>
+      </div>
+    </div>
+  </footer>
+
+ <script>
+  /* ===== Header: mobile toggle ===== */
+  (function initMobileMenu(){
+    const header = document.getElementById("siteHeader");
+    const btn = document.getElementById("mobileToggle");
+    if(!header || !btn) return;
+
+    btn.addEventListener("click", () => {
+      const open = header.classList.toggle("open");
+      btn.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+  })();
+
+  /* ===== Nav dropdowns ===== */
+  (function initNavDropdowns(){
+    const dropdowns = document.querySelectorAll("[data-dd]");
+    dropdowns.forEach(dd => {
+      const btn = dd.querySelector("button");
+      if(!btn) return;
+
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const isOpen = dd.classList.toggle("open");
+        btn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+
+        dropdowns.forEach(other => {
+          if(other !== dd){
+            other.classList.remove("open");
+            const ob = other.querySelector("button");
+            ob && ob.setAttribute("aria-expanded","false");
+          }
+        });
+      });
+    });
+
+    window.addEventListener("click", (e) => {
+      if(e.target.closest("[data-dd]")) return;
+      dropdowns.forEach(dd => {
+        dd.classList.remove("open");
+        const btn = dd.querySelector("button");
+        btn && btn.setAttribute("aria-expanded","false");
+      });
+    });
+  })();
+
+  /* ===== Language dropdown ===== */
+  (function initLang(){
+    const root = document.body;
+    const lang = root.getAttribute("data-lang") || "fr";
+    const flag = document.getElementById("langCurrentFlag");
+    const mapping = { fr: "images/fr.png", en: "images/en.png", es: "images/es.png" };
+    if(flag) flag.src = mapping[lang] || mapping.fr;
+
+    const wrap = document.getElementById("langSwitch");
+    const btn = document.getElementById("langBtn");
+    if(!wrap || !btn) return;
+
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const open = wrap.classList.toggle("open");
+      btn.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+
+    window.addEventListener("click", (e) => {
+      if(e.target.closest("#langSwitch")) return;
+      wrap.classList.remove("open");
+      btn.setAttribute("aria-expanded","false");
+    });
+  })();
+
+  (function initScrollReveal(){
+  function run(){
+    const items = document.querySelectorAll(".reveal");
+    if(!items.length) return;
+
+    // cascade sur les 4 cartes
+    document.querySelectorAll(".solutions-grid .card.reveal")
+      .forEach((card, i) => {
+        card.style.transitionDelay = `${i * 120}ms`;
+      });
+
+    // vinibook + fille exactement en même temps
+    document.querySelectorAll(".vinibook.reveal, .vinibook .girl-sitting.reveal")
+      .forEach(el => {
+        el.style.transitionDelay = "0ms";
+        el.style.transitionDuration = "700ms";
+        el.style.transitionTimingFunction = "ease";
+      });
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          entry.target.classList.add("is-visible");
+          io.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.18,
+      rootMargin: "0px 0px -8% 0px"
+    });
+
+    items.forEach(el => io.observe(el));
+  }
+
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", run);
+  } else {
+    run();
+  }
+})();
+
+
+ /* ===== Hero: image unique + typing + CTA ===== */
+function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
+
+async function typeInto(el, text, speed){
+  el.textContent = "";
+  for(let i=0;i<text.length;i++){
+    el.textContent += text[i];
+    await sleep(speed);
+  }
+}
+
+window.addEventListener("load", async () => {
+  const anim = document.getElementById("heroAnim");
+  const h1 = document.getElementById("heroTitle");
+  const p  = document.querySelector(".hero-right p");
+  const cta = document.getElementById("heroCta");
+
+  if(!anim || !h1 || !p || !cta) return;
+
+  const titleText = "Soluciones que se adaptan a sus necesidades";
+
+  // 1) image + typing en même temps
+  anim.classList.add("play");
+  const typing = typeInto(h1, titleText, 32);
+
+  // 2) respiration
+  await typing;
+  await sleep(320);
+
+  // 3) paragraphe
+  p.classList.add("show");
+
+  // 4) bouton
+  await sleep(1450);
+  cta.classList.add("brutal-show");
+});
+
+</script>
+
+</body>
+</html>
