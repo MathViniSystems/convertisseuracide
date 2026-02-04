@@ -70,6 +70,26 @@
       .grid{ grid-template-columns:1fr; }
     }
 
+    @media (max-width:720px){
+  .grid{
+    grid-template-columns:1fr;
+    gap:22px; /* plus d’espace entre les deux blocs */
+  }
+
+  .actions{
+    margin-top:18px; /* espace au-dessus des boutons */
+  }
+
+  .results{
+    margin-top:10px; /* espace entre les boutons et les équivalences */
+  }
+
+  .row{
+    padding:12px 0; /* lignes d’équivalences plus aérées */
+  }
+}
+
+
     label{
       display:block;
       font-size:13px;
